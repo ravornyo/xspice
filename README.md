@@ -1,4 +1,4 @@
 # xspice
 Xtext DSL for SPICE decks
 
-![xspice-screenshot](https://user-images.githubusercontent.com/877171/158074367-de797fc4-ca12-4da4-ae07-27cbededebd8.png)
+![xspice-screenshot](https://user-images.githubusercontent.com/877171/158074573-5c2c8d59-37c4-4a6f-a23b-ecd3d24536f7.png)
