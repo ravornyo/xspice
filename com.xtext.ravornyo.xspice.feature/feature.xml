@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<feature id="com.xtext.ravornyo.xspice.feature"
+	label="XSpice Feature "
+	version="1.0.0.qualifier">
+	<plugin
+			id="com.xtext.ravornyo.xspice"
+			download-size="0"
+			install-size="0"
+			version="0.0.0"
+			unpack="false"/>
+	<plugin
+			id="com.xtext.ravornyo.xspice.ide"
+			download-size="0"
+			install-size="0"
+			version="0.0.0"
+			unpack="false"/>
+	<plugin
+			id="com.xtext.ravornyo.xspice.ui"
+			download-size="0"
+			install-size="0"
+			version="0.0.0"
+			unpack="false"/>
+</feature>

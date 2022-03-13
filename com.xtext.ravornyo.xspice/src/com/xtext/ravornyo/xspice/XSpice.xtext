@@ -1,0 +1,307 @@
+grammar com.xtext.ravornyo.xspice.XSpice hidden(WS, SL_COMMENT) //with org.eclipse.xtext.common.Terminals
+
+generate xSpice "http://www.xtext.com/ravornyo/xspice/XSpice"
+
+import "http://www.eclipse.org/emf/2002/Ecore" as ecore
+
+Compilation:
+	{Compilation}(SL_COMMENT | (definitions+=SubCircuitDefinition) | (entities+=Entity) |(simulations+=Simulation) | (outputs+=Output) | (options+=Options) | (ic+=InitialCondition) | (nodeset+=NodeSet))*
+    '.END'?;
+
+Entity:
+	Component|SubCircuit|ResistorModel|CapacitorModel|MutualInductance|VoltageSwitchModel|CurrentSwitchModel|DiodeModel|MOSFETModel|BJTModel|JFETModel;	
+
+Component:
+	Resistor|Capacitor|Inductor|VoltageSwitch|CurrentSwitch|Diode|MOSFET|BJT|JFET|VSource|CurrentSource|VCVS|VCCS|CCCS|CCVS;	
+			
+SubCircuitDefinition:
+	'.SUBCKT' (name=Label) (pins+=NODE) (pins+=NODE)*
+	(SL_COMMENT | (definitions+=SubCircuitDefinition) | (entities+=Entity) )*
+	'.END';	
+	
+SubCircuit returns SubCircuit:
+	name=XID (nodes+=NODE) (nodes+=NODE)* definition=[SubCircuitDefinition|Label];
+		
+Resistor:
+	name=RID(nodes+=NODE)(nodes+=NODE)(resistance=NUMBER)?(model=Label)?(('L''='length=NUMBER)&('W''='width=NUMBER)?&('TEMP''='temp=NUMBER)?)?;
+
+ResistorModel:
+	'.MODEL' name=Label 'R''(' (('RSH''='sheetResistance=NUMBER) & ('DEFW''='defaultWidth=NUMBER)? & ('NARROW''='narrow=NUMBER)? & ('TC1''='temperatureCoefficient1=NUMBER)? & ('TC2''='temperatureCoefficient2=NUMBER)? & ('TNOM''='nominalTemperature=NUMBER)?) ')';
+	
+Capacitor:
+	name=CID (nodes+=NODE) (nodes+=NODE) (capacitance=NUMBER)? (model=Label)? (('L''='length=NUMBER)? & ('W''='width=NUMBER)?) ('IC''='initialCondition=NUMBER)?;
+
+CapacitorModel:
+	'.MODEL' name=Label 'C''('(('CJ''='junctionCap=NUMBER) & ('CJSW''='junctionCapSidewall=NUMBER) & ('DEFW''='defaultWidth=NUMBER)? & ('NARROW''='narrow=NUMBER)? & ('TC1''='temperatureCoefficient1=NUMBER)? & ('TC2''='temperatureCoefficient2=NUMBER)? & ('TNOM''='nominalTemperature=NUMBER)?) ')';
+
+Inductor:
+	name=LID (nodes+=NODE) (nodes+=NODE) (inductance=NUMBER) ('IC''='initialCondition=NUMBER)?;
+
+MutualInductance:
+	name=KID (inductor1=LID) (inductor2=LID) (coupling=NUMBER);
+	
+VoltageSwitch:
+	name=SID (nodes+=NODE) (nodes+=NODE) (nodes+=NODE) (nodes+=NODE) (model=Label) (zeroState?='ON'|'OFF')?;
+
+VoltageSwitchModel:
+	'.MODEL' name=Label 'SW''(' (('VT''='threshold=NUMBER) & ('VH''='hysteresis=NUMBER) & ('RON''='onResistance=NUMBER) & ('ROFF''='offResistance=NUMBER)) ')';
+			
+CurrentSwitch:
+	name=WID (nodes+=NODE) (nodes+=NODE) controllingSource=IID model=Label (zeroState?='ON'|'OFF')?;
+
+CurrentSwitchModel:
+	'.MODEL' name=Label 'CSW''(' (('IT''='threshold=NUMBER) & ('IH''='hysteresis=NUMBER) & ('RON''='onResistance=NUMBER) & ('ROFF''='offResistance=NUMBER)) ')';	
+	 
+Diode:
+	name=DID (nodes+=NODE) (nodes+=NODE) model=Label (('AREA''='area=NUMBER)? & (off?='OFF')? & ('IC''='ic=NUMBER)? & ('TEMP''='temp=NUMBER)?);	
+
+DiodeModel returns DiodeModel:
+	'.MODEL' name=Label 'D' '(' (('IS''='saturationCurrent=NUMBER)? & ('RS''='resistance=NUMBER)? & ('N''='emissionCoefficient=NUMBER)? & ('TT''='transitTime=NUMBER)? & 
+	('CJO''='junctionCap=NUMBER)? & ('VJ''='junctionPotential=NUMBER)? & ('M''='gradingCoefficient=NUMBER)? &
+	('EG''='activationEnergy=NUMBER)? & ('XTI''='saturationCurrentExp=NUMBER)? & ('KF''='flickerNoiseCoefficient=NUMBER)? & 
+	('AF''='flickerNoiseExponent=NUMBER)? & ('FC''='depletionCapCoefficient=NUMBER)? & ('BV''='breakdownVoltage=NUMBER)? & ('IBV''='breakdownCurrent=NUMBER)? & 
+	('TNOM''='nominalTemperature=NUMBER)?) ')';
+
+MOSFET:
+	name=(MNID|MPID) (nodes+=NODE) (nodes+=NODE) (nodes+=NODE) (nodes+=NODE) model=Label (('L''='length=NUMBER)? & ('W''='width=NUMBER)? & ('AD''='drainArea=NUMBER)? 
+	& ('AS''='sourceArea=NUMBER)? & ('PD''='drainPerimeter=NUMBER)? & ('PS''='sourcePerimeter=NUMBER)? & ('NRD''='drainSquares=NUMBER)? & ('NRS''='sourceSquares=NUMBER)? & (off?='OFF')? 
+	& ('IC''='(ic+=NUMBER) ',' (ic+=NUMBER) ',' (ic+=NUMBER))? & ('TEMP''='temp=NUMBER)?);
+	
+MOSFETModel:
+	'.MODEL' name=Label  ('NMOS' | 'PMOS') '(' (('LEVEL''='level=DIGIT)? & ('VTO'|'VT0' '='vt0=NUMBER)? & ('KP''='transconductance=NUMBER)? & ('GAMMA''='gamma=NUMBER)? & 
+	('PHI''='phi=NUMBER)? & ('LAMBDA''='lambda=NUMBER)? & ('RD''='drainResistance=NUMBER)? & ('RS''='sourceResistance=NUMBER)? & ('CBD''='capBd=NUMBER)? & 
+	('CBS''='capBs=NUMBER)? & ('IS''='junctionSatCur=NUMBER)? & ('PB''='bulkJunctionPotential=NUMBER)?  & ('CGSO''='gateSourceOverlapCapFactor=NUMBER)? & 
+	('CGDO''='gateDrainOverlapCapFactor=NUMBER)? & ('CGBO''='gateBulkOverlapCapFactor=NUMBER)? & ('RSH''='sheetResistance=NUMBER)? & ('CJ''='bulkCapFactor=NUMBER)? & 
+	('MJ''='bulkJunctionBotGradingCoefficient=NUMBER)? & ('CJSW''='sidewallCapFactor=NUMBER)? & ('MJSW''='bulkJunctionSideGradingCoefficient=NUMBER)? & 
+	('JS''='junctionSatCurDensity=NUMBER)? & ('TOX''='oxideThickness=NUMBER)? & ('NSUB''='substrateDoping=NUMBER)? & ('NSS''='surfaceStateDensity=NUMBER)? & ('NFS''='nfs=NUMBER)? & 
+	('TPG''='gateType=('1'|'0'|'-1'))? & ('XJ''='xj=NUMBER)? & ('LD''='lateralDiffusion=NUMBER)? & ('UO'|'U0' '='surfaceMobility=NUMBER)? & ('KF''='flickerNoiseCoefficient=NUMBER)? & 
+	('AF''='flickerNoiseExponent=NUMBER)? & ('FC''='forwardCapDepletionCoefficient=NUMBER)? & ('TNOM''='nominalTemperature=NUMBER)?) ')';
+	
+BJT:
+	name=(QNID|QPID) (nodes+=NODE) (nodes+=NODE) (nodes+=NODE) (nodes+=NODE)? model=Label (('AREA''='area=NUMBER)? & (off?='OFF')? & ('IC''='ic+=NUMBER ',' ic+=NUMBER)?  & ('TEMP''='temp=NUMBER)?);
+	
+BJTModel:
+	'.MODEL' name=Label  ('NPN' | 'PNP') '(' (('IS''='saturationCurrent=NUMBER)? & ('BF''='betaF=NUMBER)? & ('NF''='emissionCoefficientForward=NUMBER)? & 
+	('VAF''='earlyVoltageForward=NUMBER)? & ('IKF''='rollOffForward=NUMBER)? & 
+	('ISE''='leakBeCurrent=NUMBER)? & ('NE''='leakBeEmissionCoefficient=NUMBER)? & ('BR''='betaR=NUMBER)? & ('NR''='emissionCoefficientReverse=NUMBER)? & 
+	('VAR''='earlyVoltageReverse=NUMBER)? & ('IKR''='rollOffReverse=NUMBER)? & ('ISC''='leakBcCurrent=NUMBER)? & ('NC''='leakBcEmissionCoefficient=NUMBER)? &
+	('RB''='baseResist=NUMBER)? & ('IRB''='baseCurrentHalfResist=NUMBER)? & ('RBM''='minimumBaseResistance=NUMBER)? & ('RE''='emitterResistance=NUMBER)? & 
+	('RC''='collectorResistance=NUMBER)? & ('CJE''='depletionCapBe=NUMBER)? & ('VJE''='potentialBe=NUMBER)? & ('MJE''='junctionExpBe=NUMBER)? &
+	('TF''='transitTimeForward=NUMBER)? & ('XTF''='transitTimeBiasCoefficientForward=NUMBER)? & ('VTF''='transitTimeForwardVoltageBc=NUMBER)? & 
+	('ITF''='transitTimeHighCurrentForward=NUMBER)? & ('PTF''='excessPhase=NUMBER)? & ('CJC''='depletionCapBc=NUMBER)? & ('VJC''='potentialBc=NUMBER)? &
+	('MJC''='junctionExpBc=NUMBER)? & ('XCJC''='baseFractionBcCap=NUMBER)? & ('TR''='transitTimeReverse=NUMBER)? & ('CJS''='capCs=NUMBER)? & ('VJS''='potentialSubstrate=NUMBER)? & 
+	('MJS''='exponentialSubstrate=NUMBER)? & ('XTB''='betaExponent=NUMBER)? & ('EG''='energyGap=NUMBER)? & ('XTI''='tempExpIs=NUMBER)? & ('KF''='flickerNoiseCoefficient=NUMBER)? & 
+	('AF''='flickerNoiseExponent=NUMBER)? & ('FC''='depletionCapCoefficient=NUMBER)? & ('TNOM''='nominalTemperature=NUMBER)?) ')';
+	
+JFET:
+	name=(TNID|TPID) (nodes+=NODE) (nodes+=NODE) (nodes+=NODE) model=Label ( ('AREA''='area=NUMBER)? & (off?='OFF')? & ('IC''='(ic+=NUMBER) ',' (ic+=NUMBER))?  & ('TEMP''='temp=NUMBER)? );
+
+JFETModel:
+	'.MODEL' name=Label  ('NJF' | 'PJF') '('(('VTO'|'VT0' '='threshold=NUMBER)? & ('BETA''='beta=NUMBER)? & ('LAMBDA''='lambda=NUMBER)? & ('RD''='drainResistance=NUMBER)? & 
+	('RS''='sourceResistance=NUMBER)? & ('CGS''='capGs=NUMBER)? & ('CGD''='capGd=NUMBER)? & ('PB''='gatePotential=NUMBER)? &
+	('IS''='gateSaturationCurrent=NUMBER)? & ('B''='b=NUMBER)? & ('KF''='flickerNoiseCoefficient=NUMBER)? & ('AF''='flickerNoiseExponent=NUMBER)? & ('FC''='depletionCapCoefficient=NUMBER)? & 
+	('TNOM''='nominalTemperature=NUMBER)? );
+	
+VSource:
+	name=VID (nodes+=NODE) (nodes+=NODE) ('DC'? dc=NUMBER)? ('AC' (ac+=NUMBER) (ac+=NUMBER)?)? (waveform=Waveform)?;
+
+CurrentSource:
+	name=IID (nodes+=NODE) (nodes+=NODE) ('DC'? dc=NUMBER)? ('AC' (ac+=NUMBER) (ac+=NUMBER)?)? (waveform=Waveform)?;
+		
+VCVS:
+	name=EID (nodes+=NODE) (nodes+=NODE) (nodes+=NODE) (nodes+=NODE) gain=NUMBER;
+	
+VCCS:
+	name=GID (nodes+=NODE) (nodes+=NODE) (nodes+=NODE) (nodes+=NODE) transconductance=NUMBER;
+	
+CCCS:
+	name=FID (nodes+=NODE) (nodes+=NODE) controller=VID gain=NUMBER;
+	
+CCVS:
+	name=HID (nodes+=NODE) (nodes+=NODE) controller=VID transresistance=NUMBER;
+		
+GeometericSweep:
+	LinearSweep|OctaveSweep|DecadeSweep;
+	
+LinearSweep:
+	'LIN' (initial=NUMBER) (final=NUMBER) (delta=NUMBER);
+
+OctaveSweep:
+	'OCT' (initial=NUMBER) (final=NUMBER) (pointsPerOctave=NUMBER);
+	
+DecadeSweep:
+	'DEC' (initial=NUMBER) (final=NUMBER) (pointsPerDecade=NUMBER);
+			
+ParameterSweep:
+	source=Label sweep=GeometericSweep;	
+	
+Simulation:
+	ACSimulation | DCSimulation | NoiseSimulation | TransientSimulation | {Simulation} OP;
+
+ACSimulation:
+	'.AC' (sweep=GeometericSweep);
+	
+DCSimulation:
+	'.DC' (sweeps+=ParameterSweep) (sweeps+=ParameterSweep)*;
+		
+NoiseSimulation:
+	'.NOISE' ((output+=Export) (inputSource=Label) (isweep=GeometericSweep));
+	
+TransientSimulation:
+	'.TRAN' ((args+=NUMBER) (args+=NUMBER) (args+=NUMBER)* (uic?='UIC')?);
+	
+Output:
+	Print|Plot;
+	
+Print:	
+	'.PRINT' prtype=PRTYPE (exports+=Export) (exports+=Export)*;
+
+Plot:	
+	'.PLOT' prtype=PRTYPE (exports+=Export) (exports+=Export)*;
+	
+Export:
+	VoltageExport | CurrentExport;
+	
+VoltageExport:
+	prefix=('V'|'VM'|'VDB'|'VP'|'VR'|'VI') '(' ((nodes+=Label) (',' (nodes+=NODE))?) ')';
+	
+CurrentExport:
+	prefix=('I'|'IM'|'IDB'|'IP'|'IR'|'II') '(' (nodes+=Label) ')';	
+						
+Waveform:
+	Exp|Sine|Pulse|PWL|SFFM|AM;	
+
+Exp:
+	'EXP''(' (args+=NUMBER) (args+=NUMBER)* ')';
+		
+Sine:
+	'SIN''(' (args+=NUMBER) (args+=NUMBER)* ')';
+	
+Pulse:
+	'PULSE''(' (args+=NUMBER) (args+=NUMBER)* ')';
+
+PWL:
+	'PWL''('(args+=NUMBER args+=NUMBER) (args+=NUMBER args+=NUMBER)*')';
+	
+SFFM:	
+	'SFFM''(' (args+=NUMBER) (args+=NUMBER)* ')';
+	
+AM:	
+	'AM''(' (args+=NUMBER) (args+=NUMBER)* ')';
+
+Options:
+	'.OPTION' (('ABSTOL' '=' abstol=NUMBER) & ('BADMOS3' '=' badmos3=NUMBER) & ('CHGTOL' '=' chgtol=NUMBER) 
+	& ('DEFAD' '=' defad=NUMBER) & ('DEFAS' '=' defas=NUMBER) & ('DEFL' '=' defl=NUMBER) & ('DEFW' '=' defaultWidth=NUMBER) 
+	& ('GMIN' '=' gmin=NUMBER) & ('ITL1' '=' itl1=NUMBER) & ('ITL2' '=' itl2=NUMBER) & ('ITL3' '=' itl3=NUMBER) & ('ITL4' '=' itl4=NUMBER)
+	& ('ITL5' '=' itl5=NUMBER) & ('KEEPOPINFO' '=' keepopinfo=NUMBER) & ('METHOD' '=' method=IntegrationMethod) & ('PIVREL' '=' pivrel=NUMBER)
+	& ('RELTOL' '=' reltol=NUMBER) & ('TEMP' '=' temp=NUMBER) & ('TNOM' '=' nominalTemperature=NUMBER) & ('TRTOL' '=' trtol=NUMBER) & ('VNTOL' '=' vntol=NUMBER));
+
+NodeSet:
+	'.NODESET' (entries+=NodeSetEntry) (entries+=NodeSetEntry)*;
+	
+InitialCondition:
+	'.IC' (entries+=NodeSetEntry) (entries+=NodeSetEntry)*;
+	
+NodeSetEntry:
+	'V' '(' (node+=NODE) ')' '=' value=NUMBER;
+
+Label returns ecore::EString:
+	NODE|BID|CID|DID|EID|FID|GID|HID|IID|KID|LID|MNID|MPID|OID|QNID|QPID|RID|SID|TNID|TPID|VID|ID;
+
+enum PRTYPE:DC='DC'| AC='AC'| TRAN='TRAN' | NOISE='NOISE';
+	 
+enum IntegrationMethod:GEAR='Gear'|TRAPEZOIDAL='Trapezoidal'|EULER='Euler';
+
+terminal OP:'.OP';
+
+terminal CHAR returns ecore::EString:('a'..'z'|'A'..'Z');
+	
+terminal DIGIT returns ecore::EInt:('0'..'9');
+		   		
+terminal BID returns ecore::EString:
+	'^'?('B')(CHAR|'_'|DIGIT)(CHAR|'_'|DIGIT)*;
+
+terminal CID returns ecore::EString:
+	'^'?('C')(CHAR|'_'|DIGIT)(CHAR|'_'|DIGIT)*;
+		
+terminal DID returns ecore::EString:
+	'^'?('D')(CHAR|'_'|DIGIT)(CHAR|'_'|DIGIT)*;
+		
+terminal EID returns ecore::EString:
+	'^'?('E')(CHAR|'_'|DIGIT)(CHAR|'_'|DIGIT)*;
+
+terminal FID returns ecore::EString:
+	'^'?('F')(CHAR|'_'|DIGIT)(CHAR|'_'|DIGIT)*;
+	
+terminal GID returns ecore::EString:
+	'^'?('G')(CHAR|'_'|DIGIT)(CHAR|'_'|DIGIT)*;
+
+terminal HID returns ecore::EString:
+	'^'?('H')(CHAR|'_'|DIGIT)(CHAR|'_'|DIGIT)*;
+
+terminal IID returns ecore::EString:
+	'^'?('I')(CHAR|'_'|DIGIT)(CHAR|'_'|DIGIT)*;
+
+terminal KID returns ecore::EString:
+	'^'?('K')(CHAR|'_'|DIGIT)(CHAR|'_'|DIGIT)*;
+	
+terminal LID returns ecore::EString:
+	'^'?('L')(CHAR|'_'|DIGIT)(CHAR|'_'|DIGIT)*;	
+
+terminal MNID returns ecore::EString:
+	'^'?('MN')(CHAR|'_'|DIGIT)(CHAR|'_'|DIGIT)*;
+	
+terminal MPID returns ecore::EString:
+	'^'?('MP')(CHAR|'_'|DIGIT) (CHAR|'_'|DIGIT)*;	
+	
+terminal OID returns ecore::EString:
+	'^'?('O')(CHAR|'_'|DIGIT)(CHAR|'_'|DIGIT)*;
+	
+terminal QNID returns ecore::EString:
+	'^'?('QN')(CHAR|'_'|DIGIT)(CHAR|'_'|DIGIT)*;
+
+terminal QPID returns ecore::EString:
+	'^'?('QP')(CHAR|'_'|DIGIT)(CHAR|'_'|DIGIT)*;
+			
+terminal RID returns ecore::EString:
+	'^'?('R')(CHAR|'_'|DIGIT)(CHAR|'_'|DIGIT)*;	
+
+terminal SID returns ecore::EString:
+	'^'?('S')(CHAR|'_'|DIGIT)(CHAR|'_'|DIGIT)*;
+
+terminal TNID returns ecore::EString:
+	'^'?('TN')(CHAR|'_'|DIGIT)(CHAR|'_'|DIGIT)*;
+
+terminal TPID returns ecore::EString:
+	'^'?('TP')(CHAR|'_'|DIGIT) (CHAR|'_'|DIGIT)*;
+			
+terminal VID returns ecore::EString:
+	'^'?('V')(CHAR|'_'|DIGIT) (CHAR|'_'|DIGIT)*;
+
+terminal WID returns ecore::EString:
+	'^'?('W')(CHAR|'_'|DIGIT)(CHAR|'_'|DIGIT)*;
+	
+terminal XID returns ecore::EString:
+	'^'?('X')(CHAR|'_'|DIGIT)(CHAR|'_'|DIGIT)*;	
+
+terminal INT returns ecore::EInt:
+	(DIGIT)(DIGIT)*;
+	
+terminal DECIMAL returns ecore::EInt:
+	('+'|'-')?(INT '.')? INT;
+	
+terminal METRIC_PREFIX returns ecore::EChar:
+	('E'|'P'|'T'|'G'|'M'|'K'|'k'|'H'|'d'|'c'|'m'|'U'|'u'|'μ'|'n'|'p'|'f'|'a');		
+								
+terminal NUMBER returns ecore::EBigDecimal:
+	DECIMAL (('E'|'e')('-'|'+')? INT)? METRIC_PREFIX?;
+
+terminal NODE returns ecore::EString:'^'?('N'|'n')?(CHAR|'_'|DIGIT)(CHAR|'_'|DIGIT);	//'^'?(DIGIT|NUMBER|CHAR)(CHAR|'_'|DIGIT)*;
+
+terminal ID returns ecore::EString:'^'?(CHAR|'_')(CHAR|'_'|DIGIT)*;
+
+terminal SL_COMMENT:
+    ('//'|';'|'*') !('\n'|'\r')* ('\r'? '\n')?;	
+    
+terminal WS: 
+	(' '|'\t'|'\r'|'\n')+;

@@ -1,0 +1,227 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<?eclipse version="3.0"?>
+<plugin>
+	<extension point="org.eclipse.emf.ecore.generated_package">
+		<package 
+			uri = "http://www.xtext.com/ravornyo/xspice/XSpice"
+			class = "com.xtext.ravornyo.xspice.xSpice.XSpicePackage"
+			genModel = "model/generated/XSpice.genmodel" />
+	</extension>
+
+   <extension point="org.eclipse.emf.ecore.generated_package">
+      <!-- @generated XSpice -->
+      <package
+            uri="http://www.xtext.com/ravornyo/xspice/semantic"
+            class="com.xtext.ravornyo.xspice.semantic.SemanticPackage"
+            genModel="model/custom/XSpice.genmodel"/>
+   </extension>
+
+   <extension point="org.eclipse.emf.ecore.generated_package">
+      <!-- @generated XSpice -->
+      <package
+            uri="http://www.xtext.com/ravornyo/xspice/semantic/components"
+            class="com.xtext.ravornyo.xspice.semantic.components.ComponentsPackage"
+            genModel="model/custom/XSpice.genmodel"/>
+   </extension>
+
+   <extension point="org.eclipse.emf.ecore.generated_package">
+      <!-- @generated XSpice -->
+      <package
+            uri="http://www.xtext.com/ravornyo/xspice/semantic/components/resistors"
+            class="com.xtext.ravornyo.xspice.semantic.components.resistors.ResistorsPackage"
+            genModel="model/custom/XSpice.genmodel"/>
+   </extension>
+
+   <extension point="org.eclipse.emf.ecore.generated_package">
+      <!-- @generated XSpice -->
+      <package
+            uri="http://www.xtext.com/ravornyo/xspice/semantic/components/capacitors"
+            class="com.xtext.ravornyo.xspice.semantic.components.capacitors.CapacitorsPackage"
+            genModel="model/custom/XSpice.genmodel"/>
+   </extension>
+
+   <extension point="org.eclipse.emf.ecore.generated_package">
+      <!-- @generated XSpice -->
+      <package
+            uri="http://www.xtext.com/ravornyo/xspice/semantic/components/inductors"
+            class="com.xtext.ravornyo.xspice.semantic.components.inductors.InductorsPackage"
+            genModel="model/custom/XSpice.genmodel"/>
+   </extension>
+
+   <extension point="org.eclipse.emf.ecore.generated_package">
+      <!-- @generated XSpice -->
+      <package
+            uri="http://www.xtext.com/ravornyo/xspice/semantic/components/mutualinductances"
+            class="com.xtext.ravornyo.xspice.semantic.components.mutualinductances.MutualinductancesPackage"
+            genModel="model/custom/XSpice.genmodel"/>
+   </extension>
+
+   <extension point="org.eclipse.emf.ecore.generated_package">
+      <!-- @generated XSpice -->
+      <package
+            uri="http://www.xtext.com/ravornyo/xspice/semantic/components/switches"
+            class="com.xtext.ravornyo.xspice.semantic.components.switches.SwitchesPackage"
+            genModel="model/custom/XSpice.genmodel"/>
+   </extension>
+
+   <extension point="org.eclipse.emf.ecore.generated_package">
+      <!-- @generated XSpice -->
+      <package
+            uri="http://www.xtext.com/ravornyo/xspice/semantic/components/diodes"
+            class="com.xtext.ravornyo.xspice.semantic.components.diodes.DiodesPackage"
+            genModel="model/custom/XSpice.genmodel"/>
+   </extension>
+
+   <extension point="org.eclipse.emf.ecore.generated_package">
+      <!-- @generated XSpice -->
+      <package
+            uri="http://www.xtext.com/ravornyo/xspice/semantic/components/voltagesources"
+            class="com.xtext.ravornyo.xspice.semantic.components.voltagesources.VoltagesourcesPackage"
+            genModel="model/custom/XSpice.genmodel"/>
+   </extension>
+
+   <extension point="org.eclipse.emf.ecore.generated_package">
+      <!-- @generated XSpice -->
+      <package
+            uri="http://www.xtext.com/ravornyo/xspice/semantic/components/bjts"
+            class="com.xtext.ravornyo.xspice.semantic.components.bjts.BjtsPackage"
+            genModel="model/custom/XSpice.genmodel"/>
+   </extension>
+
+   <extension point="org.eclipse.emf.ecore.generated_package">
+      <!-- @generated XSpice -->
+      <package
+            uri="http://www.xtext.com/ravornyo/xspice/semantic/components/currentsources"
+            class="com.xtext.ravornyo.xspice.semantic.components.currentsources.CurrentsourcesPackage"
+            genModel="model/custom/XSpice.genmodel"/>
+   </extension>
+
+   <extension point="org.eclipse.emf.ecore.generated_package">
+      <!-- @generated XSpice -->
+      <package
+            uri="http://www.xtext.com/ravornyo/xspice/semantic/components/jfets"
+            class="com.xtext.ravornyo.xspice.semantic.components.jfets.JfetsPackage"
+            genModel="model/custom/XSpice.genmodel"/>
+   </extension>
+
+   <extension point="org.eclipse.emf.ecore.generated_package">
+      <!-- @generated XSpice -->
+      <package
+            uri="http://www.xtext.com/ravornyo/xspice/semantic/components/vcvs"
+            class="com.xtext.ravornyo.xspice.semantic.components.vcvs.VcvsPackage"
+            genModel="model/custom/XSpice.genmodel"/>
+   </extension>
+
+   <extension point="org.eclipse.emf.ecore.generated_package">
+      <!-- @generated XSpice -->
+      <package
+            uri="http://www.xtext.com/ravornyo/xspice/semantic/components/mosfets"
+            class="com.xtext.ravornyo.xspice.semantic.components.mosfets.MosfetsPackage"
+            genModel="model/custom/XSpice.genmodel"/>
+   </extension>
+
+   <extension point="org.eclipse.emf.ecore.generated_package">
+      <!-- @generated XSpice -->
+      <package
+            uri="http://www.xtext.com/ravornyo/xspice/semantic/components/vccs"
+            class="com.xtext.ravornyo.xspice.semantic.components.vccs.VccsPackage"
+            genModel="model/custom/XSpice.genmodel"/>
+   </extension>
+
+   <extension point="org.eclipse.emf.ecore.generated_package">
+      <!-- @generated XSpice -->
+      <package
+            uri="http://www.xtext.com/ravornyo/xspice/semantic/components/cccs"
+            class="com.xtext.ravornyo.xspice.semantic.components.cccs.CccsPackage"
+            genModel="model/custom/XSpice.genmodel"/>
+   </extension>
+
+   <extension point="org.eclipse.emf.ecore.generated_package">
+      <!-- @generated XSpice -->
+      <package
+            uri="http://www.xtext.com/ravornyo/xspice/semantic/components/ccvs"
+            class="com.xtext.ravornyo.xspice.semantic.components.ccvs.CcvsPackage"
+            genModel="model/custom/XSpice.genmodel"/>
+   </extension>
+
+   <extension point="org.eclipse.emf.ecore.generated_package">
+      <!-- @generated XSpice -->
+      <package
+            uri="http://www.xtext.com/ravornyo/xspice/semantic/components/subcircuit"
+            class="com.xtext.ravornyo.xspice.semantic.components.subcircuit.SubcircuitPackage"
+            genModel="model/custom/XSpice.genmodel"/>
+   </extension>
+
+   <extension point="org.eclipse.emf.ecore.generated_package">
+      <!-- @generated XSpice -->
+      <package
+            uri="http://www.xtext.com/ravornyo/xspice/semantic/components/waveforms"
+            class="com.xtext.ravornyo.xspice.semantic.components.waveforms.WaveformsPackage"
+            genModel="model/custom/XSpice.genmodel"/>
+   </extension>
+
+   <extension point="org.eclipse.emf.ecore.generated_package">
+      <!-- @generated XSpice -->
+      <package
+            uri="http://www.xtext.com/ravornyo/xspice/semantic/simulation"
+            class="com.xtext.ravornyo.xspice.semantic.simulation.SimulationPackage"
+            genModel="model/custom/XSpice.genmodel"/>
+   </extension>
+
+   <extension point="org.eclipse.emf.ecore.generated_package">
+      <!-- @generated XSpice -->
+      <package
+            uri="http://www.xtext.com/ravornyo/xspice/semantic/simulation/implementations/ac"
+            class="com.xtext.ravornyo.xspice.semantic.simulation.implementations.ac.AcPackage"
+            genModel="model/custom/XSpice.genmodel"/>
+   </extension>
+
+   <extension point="org.eclipse.emf.ecore.generated_package">
+      <!-- @generated XSpice -->
+      <package
+            uri="http://www.xtext.com/ravornyo/xspice/semantic/simulation/implementations/dc"
+            class="com.xtext.ravornyo.xspice.semantic.simulation.implementations.dc.DcPackage"
+            genModel="model/custom/XSpice.genmodel"/>
+   </extension>
+
+   <extension point="org.eclipse.emf.ecore.generated_package">
+      <!-- @generated XSpice -->
+      <package
+            uri="http://www.xtext.com/ravornyo/xspice/semantic/simulation/implementations/noise"
+            class="com.xtext.ravornyo.xspice.semantic.simulation.implementations.noise.NoisePackage"
+            genModel="model/custom/XSpice.genmodel"/>
+   </extension>
+
+   <extension point="org.eclipse.emf.ecore.generated_package">
+      <!-- @generated XSpice -->
+      <package
+            uri="http://www.xtext.com/ravornyo/xspice/semantic/simulation/implementations/transient"
+            class="com.xtext.ravornyo.xspice.semantic.simulation.implementations.transient_.TransientPackage"
+            genModel="model/custom/XSpice.genmodel"/>
+   </extension>
+
+   <extension point="org.eclipse.emf.ecore.generated_package">
+      <!-- @generated XSpice -->
+      <package
+            uri="http://www.xtext.com/ravornyo/xspice/semantic/simulation/exports"
+            class="com.xtext.ravornyo.xspice.semantic.simulation.exports.ExportsPackage"
+            genModel="model/custom/XSpice.genmodel"/>
+   </extension>
+
+   <extension point="org.eclipse.emf.ecore.generated_package">
+      <!-- @generated XSpice -->
+      <package
+            uri="http://www.xtext.com/ravornyo/xspice/semantic/simulation/base/sweeps"
+            class="com.xtext.ravornyo.xspice.semantic.simulation.sweeps.SweepsPackage"
+            genModel="model/custom/XSpice.genmodel"/>
+   </extension>
+
+   <extension point="org.eclipse.emf.ecore.generated_package">
+      <!-- @generated XSpice -->
+      <package
+            uri="http://www.xtext.com/ravornyo/xspice/semantic/entities"
+            class="com.xtext.ravornyo.xspice.semantic.entities.EntitiesPackage"
+            genModel="model/custom/XSpice.genmodel"/>
+   </extension>
+
+</plugin>
